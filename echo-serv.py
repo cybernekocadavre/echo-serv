@@ -73,4 +73,3 @@ while True:
     except ConnectionResetError:
         print("Соединение с клиентом разорвано.")
         client_socket.close()
-
