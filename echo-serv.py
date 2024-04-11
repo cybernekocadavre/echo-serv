@@ -9,43 +9,36 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт для сервера
 host = ''  # Пустая строка означает использование всех доступных интерфейсов
-port = 9091  # Выбираем порт для сервера
+port = 9090  # Выбираем порт для сервера
 
 # Связываем сокет с хостом и портом
 server_socket.bind((host, port))
 
-# Начинаем прослушивать порт, одновременно обслуживая только одно подключение
-server_socket.listen(1)
+while True:
+    # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
+    server_socket.listen(1)
 
-print("Сервер запущен. Ожидание подключения...")
+    print("Сервер запущен. Ожидание подключения...")
 
-# Принимаем входящее подключение
-client_socket, client_address = server_socket.accept()
-print(f"Подключение от {client_address}")
+    # Принимаем входящее подключение
+    client_socket, client_address = server_socket.accept()
+    print(f"Подключение от {client_address}")
 
-try:
-    while True:
-        # Принимаем данные от клиента
-        data = client_socket.recv(1024)
-        if not data:
-            break
+    try:
+        while True:
+            # Принимаем данные от клиента
+            data = client_socket.recv(1024)
+            if not data:
+                break
 
-        # Выводим данные от клиента
-        message = data.decode('utf-8')
-        print(f"Принято от клиента: {message}")
+            # Отправляем обратно клиенту те же данные в верхнем регистре
+            client_socket.sendall(data.upper())
+            print(f"Принято от клиента: {data.decode('utf-8')}")
 
-        # Если клиент ввел "exit", останавливаемся
-        if message.strip() == "exit":
-            break
-
-        # Отправляем обратно клиенту те же данные в верхнем регистре
-        client_socket.sendall(data.upper())
-
-finally:
-    # Закрываем соединение с клиентом
-    client_socket.close()
+    finally:
+        # Закрываем соединение с клиентом
+        client_socket.close()
+        print("Соединение с клиентом закрыто.")
 
 # Закрываем серверный сокет
 server_socket.close()
-print("Сервер остановлен")
-
