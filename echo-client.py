@@ -18,7 +18,7 @@ print("Подключение к серверу установлено.")
 
 try:
     # Отправляем данные серверу
-    message = 'hello, world!'
+    message = 'блин виртуалка не работает'
     client_socket.sendall(message.encode('utf-8'))
     print(f"Отправлено серверу: {message}")
 
