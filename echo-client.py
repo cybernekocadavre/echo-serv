@@ -41,3 +41,7 @@ try:
 
 except KeyboardInterrupt:
     print("\nКлиент остановлен.")
+
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
+
