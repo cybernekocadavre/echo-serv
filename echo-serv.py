@@ -37,9 +37,6 @@ server_socket.listen(1)
 
 print("Сервер запущен. Ожидание подключения...")
 
-# Читаем информацию о клиентах из файла
-clients = read_clients()
-
 while True:
     # Принимаем входящее подключение
     client_socket, client_address = server_socket.accept()
@@ -47,14 +44,17 @@ while True:
 
     ip = client_address[0]
 
+    # Читаем информацию о клиентах из файла
+    clients = read_clients()
+
     if ip in clients:
         # Если клиент известен, приветствуем его
         client_socket.send("Снова здравствуйте!".encode())
     else:
         # Если клиент неизвестен, приветствуем
         client_socket.send("Привет!".encode())
+        # Записываем нового клиента в файл
         write_client(ip)
-        clients.append(ip)
 
     try:
         while True:
@@ -62,6 +62,7 @@ while True:
             data = client_socket.recv(1024)
             if not data:
                 break
+
             # Преобразуем данные в верхний регистр и отправляем обратно клиенту
             client_socket.send(data.upper())
             # Логируем принятые данные
@@ -70,3 +71,4 @@ while True:
     except ConnectionResetError:
         print("Соединение с клиентом разорвано.")
         client_socket.close()
+
