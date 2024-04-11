@@ -11,7 +11,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт сервера
 host = 'localhost'  # Хост сервера
-port = 9090  # Порт сервера, должен совпадать с портом сервера
+port = 9091  # Порт сервера, должен совпадать с портом сервера
 
 # Подключаемся к серверу
 client_socket.connect((host, port))
