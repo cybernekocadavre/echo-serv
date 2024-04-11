@@ -3,27 +3,20 @@
 
 # In[ ]:
 import socket
-import sys
 
 def get_host_port():
     default_host = 'localhost'
     default_port = 9091
 
-    if len(sys.argv) > 1:
-        name = sys.argv[1]
-    else:
-        name = input("Enter name:")
+    print("Введите имя хоста (по умолчанию {}): ".format(default_host))
+    host_input = input()
+    host = host_input.strip() or default_host
 
-    print(name)
-
-    print(f"Введите номер порта (по умолчанию {default_port}): ")
-    sys.stdout.flush()
-    port_input = sys.stdin.read().strip()
-    port = port_input or default_port
+    print("Введите номер порта (по умолчанию {}): ".format(default_port))
+    port_input = input()
+    port = port_input.strip() or default_port
 
     return host, int(port)
-
-
 
 # Создаем TCP сокет
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,11 +30,11 @@ try:
     # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
     server_socket.listen(1)
 
-    print(f"Сервер запущен. Ожидание подключения на {host}:{port}...")
+    print("Сервер запущен. Ожидание подключения на {}:{}".format(host, port))
 
     # Принимаем входящее подключение
     client_socket, client_address = server_socket.accept()
-    print(f"Подключение от {client_address}")
+    print("Подключение от {}".format(client_address))
 
     try:
         while True:
@@ -52,7 +45,7 @@ try:
 
             # Отправляем обратно клиенту те же данные в верхнем регистре
             client_socket.sendall(data.upper())
-            print(f"Принято от клиента: {data.decode('utf-8')}")
+            print("Принято от клиента: {}".format(data.decode('utf-8')))
 
     finally:
         # Закрываем соединение с клиентом
@@ -63,7 +56,7 @@ except KeyboardInterrupt:
     print("\nСервер остановлен.")
 
 except Exception as e:
-    print(f"Произошла ошибка: {e}")
+    print("Произошла ошибка: {}".format(e))
 
 finally:
     # Закрываем серверный сокет
