@@ -4,22 +4,19 @@
 # In[ ]:
 import socket
 
-# Функция для чтения имен клиентов из файла
+# Функция для чтения IP-адресов клиентов из файла
 def read_clients():
     try:
         with open('clients.txt', 'r') as file:
-            clients = {}
-            for line in file:
-                ip, name = line.strip().split(',')
-                clients[ip] = name
+            clients = [line.strip() for line in file]
         return clients
     except FileNotFoundError:
-        return {}
+        return []
 
 # Функция для записи нового клиента в файл
-def write_client(ip, name):
+def write_client(ip):
     with open('clients.txt', 'a') as file:
-        file.write(f"{ip},{name}\n")
+        file.write(f"{ip}\n")
 
 # Создаем TCP сокет
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,20 +44,13 @@ while True:
     ip = client_address[0]
 
     if ip in clients:
-        # Если клиент известен, приветствуем его по имени
-        name = clients[ip]
-        client_socket.send(f"Привет, {name}!".encode())
+        # Если клиент известен, приветствуем его
+        client_socket.send("Снова здравствуйте!".encode())
     else:
-        # Если клиент неизвестен, запрашиваем у него имя
-        client_socket.send("Привет! Пожалуйста, введите ваше имя: ".encode())
-        name = client_socket.recv(1024).decode().strip()
-        print(f"Новый клиент ({ip}): {name}")
-
-        # Записываем имя клиента в файл
-        write_client(ip, name)
-
-        # Отправляем клиенту сообщение с приветствием
-        client_socket.send(f"Привет, {name}! Ваше имя добавлено в список известных клиентов.".encode())
+        # Если клиент неизвестен, записываем его IP-адрес в файл
+        write_client(ip)
+        client_socket.send("Привет!".encode())
 
     # Закрываем соединение с клиентом
     client_socket.close()
+
