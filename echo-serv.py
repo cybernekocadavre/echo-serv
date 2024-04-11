@@ -27,7 +27,7 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт для сервера
 host = ''  # Пустая строка означает использование всех доступных интерфейсов
-port = 9091  # Выбираем порт для сервера
+port = 9090  # Выбираем порт для сервера
 
 # Связываем сокет с хостом и портом
 server_socket.bind((host, port))
@@ -47,12 +47,16 @@ while True:
 
     ip = client_address[0]
 
+    if ip not in clients:
+        # Если клиент неизвестен, записываем его IP-адрес в файл
+        write_client(ip)
+        clients.append(ip)
+
     if ip in clients:
         # Если клиент известен, приветствуем его
         client_socket.send("Снова здравствуйте!".encode())
     else:
-        # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
-        write_client(ip)
+        # Если клиент неизвестен, приветствуем
         client_socket.send("Привет!".encode())
 
     try:
@@ -69,3 +73,4 @@ while True:
     except ConnectionResetError:
         print("Соединение с клиентом разорвано.")
         client_socket.close()
+
