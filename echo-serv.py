@@ -48,6 +48,15 @@ while True:
     ip = client_address[0]
 
     try:
+        # Отправляем приветствие
+        if ip in clients:
+            # Если клиент известен, приветствуем его
+            client_socket.send("Снова здравствуйте!".encode())
+        else:
+            # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
+            write_client(ip)
+            client_socket.send("Привет!".encode())
+
         while True:
             # Получаем данные от клиента
             data = client_socket.recv(1024)
@@ -57,14 +66,6 @@ while True:
             client_socket.send(data.upper())
             # Логируем принятые данные
             logging.info(data.decode())
-
-        if ip in clients:
-            # Если клиент известен, приветствуем его
-            client_socket.send("Снова здравствуйте!".encode())
-        else:
-            # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
-            write_client(ip)
-            client_socket.send("Привет!".encode())
 
     except ConnectionResetError:
         print("Соединение с клиентом разорвано.")
