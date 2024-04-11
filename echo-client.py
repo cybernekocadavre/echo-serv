@@ -6,29 +6,25 @@
 
 import socket
 
-# Создаем TCP сокет
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = input("Введите имя хоста сервера: ")
+port = int(input("Введите номер порта сервера: "))
 
-# Получаем хост и порт сервера
-host = 'localhost'  # Хост сервера
-port = 9091  # Порт сервера, должен совпадать с портом сервера
-
-# Подключаемся к серверу
 client_socket.connect((host, port))
 print("Подключение к серверу установлено.")
 
 try:
-    # Отправляем данные серверу
-    message = 'hello, world!'
-    client_socket.sendall(message.encode('utf-8'))
-    print(f"Отправлено серверу: {message}")
+    while True:
+        message = input("Введите сообщение для отправки серверу ('exit' для завершения): ")
+        if message.lower() == "exit":
+            break
 
-    # Получаем ответ от сервера
-    data = client_socket.recv(1024)
-    print(f"Получено от сервера: {data.decode('utf-8')}")
+        client_socket.sendall(message.encode('utf-8'))
+        print(f"Отправлено серверу: {message}")
+
+        data = client_socket.recv(1024)
+        print(f"Получено от сервера: {data.decode('utf-8')}")
 
 finally:
-    # Закрываем соединение с сервером
     client_socket.close()
     print("Соединение с сервером закрыто.")
-
