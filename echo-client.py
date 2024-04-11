@@ -17,12 +17,16 @@ client_socket.connect((host, port))
 print("Подключение к серверу установлено.")
 
 try:
+    # Получаем и выводим приветственное сообщение от сервера
+    data = client_socket.recv(1024)
+    print(f"Получено от сервера: {data.decode('utf-8')}")
+
     # Отправляем данные серверу
     message = 'svobodu popugayam'
     client_socket.sendall(message.encode('utf-8'))
     print(f"Отправлено серверу: {message}")
 
-    # Получаем ответ от сервера
+    # Получаем и выводим ответ от сервера
     data = client_socket.recv(1024)
     print(f"Получено от сервера: {data.decode('utf-8')}")
 
@@ -30,3 +34,4 @@ finally:
     # Закрываем соединение с сервером
     client_socket.close()
     print("Соединение с сервером закрыто.")
+
