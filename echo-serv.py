@@ -2,7 +2,7 @@
 # coding: cp1251
 
 # In[ ]:
-
+import socket
 # Код сервера с модификациями
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = input("Введите имя хоста для сервера (пусто для использования всех доступных интерфейсов): ")
