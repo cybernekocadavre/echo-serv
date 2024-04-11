@@ -8,8 +8,11 @@ def get_host_port():
     default_host = 'localhost'
     default_port = 9091
 
-    host = input(f"Введите имя хоста (по умолчанию {default_host}): ") or default_host
-    port = input(f"Введите номер порта (по умолчанию {default_port}): ") or default_port
+    host_input = input(f"Введите имя хоста (по умолчанию {default_host}): ")
+    host = host_input.strip() or default_host
+
+    port_input = input(f"Введите номер порта (по умолчанию {default_port}): ")
+    port = port_input.strip() or default_port
 
     return host, int(port)
 
@@ -17,10 +20,15 @@ def get_host_port():
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
-    host, port = get_host_port()
+    while True:
+        host, port = get_host_port()
 
-    # Связываем сокет с хостом и портом
-    server_socket.bind((host, port))
+        try:
+            # Связываем сокет с хостом и портом
+            server_socket.bind((host, port))
+            break
+        except OSError as e:
+            print(f"Ошибка: {e}. Попробуйте другой хост и/или порт.")
 
     # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
     server_socket.listen(1)
@@ -50,9 +58,7 @@ try:
 except KeyboardInterrupt:
     print("\nСервер остановлен.")
 
-except Exception as e:
-    print(f"Произошла ошибка: {e}")
-
 finally:
     # Закрываем серверный сокет
     server_socket.close()
+
