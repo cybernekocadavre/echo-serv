@@ -27,7 +27,7 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт для сервера
 host = ''  # Пустая строка означает использование всех доступных интерфейсов
-port = 9091  # Выбираем порт для сервера
+port = 9090  # Выбираем порт для сервера
 
 # Связываем сокет с хостом и портом
 server_socket.bind((host, port))
@@ -47,18 +47,26 @@ while True:
 
     ip = client_address[0]
 
-try:
-    data = client_socket.recv(1024)
-    if ip in clients:
-        # Если клиент известен, приветствуем его и отправляем данные в верхнем регистре
-        client_socket.send(f"Снова здравствуйте! {data.decode().upper()}".encode())
-    else:
-        # Если клиент неизвестен, записываем его IP-адрес в файл, приветствуем его и отправляем данные в верхнем регистре
-        write_client(ip)
-        client_socket.send(f"Привет! {data.decode().upper()}".encode())
-    
-    logging.info(data.decode())
-except ConnectionResetError:
-    print("Соединение с клиентом разорвано.")
-    client_socket.close()
+    try:
+        while True:
+            # Получаем данные от клиента
+            data = client_socket.recv(1024)
+            if not data:
+                break
+            # Преобразуем данные в верхний регистр и отправляем обратно клиенту
+            client_socket.send(data.upper())
+            # Логируем принятые данные
+            logging.info(data.decode())
+
+        if ip in clients:
+            # Если клиент известен, приветствуем его
+            client_socket.send("Снова здравствуйте!".encode())
+        else:
+            # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
+            write_client(ip)
+            client_socket.send("Привет!".encode())
+
+    except ConnectionResetError:
+        print("Соединение с клиентом разорвано.")
+        client_socket.close()
 
