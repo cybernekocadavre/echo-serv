@@ -9,10 +9,12 @@ def get_host_port():
     default_host = 'localhost'
     default_port = 9091
 
-    print(f"Введите имя хоста (по умолчанию {default_host}): ")
-    sys.stdout.flush()
-    host_input = sys.stdin.read().strip()
-    host = host_input or default_host
+    if len(sys.argv) > 1:
+        name = sys.argv[1]
+    else:
+        name = input("Enter name:")
+
+    print(name)
 
     print(f"Введите номер порта (по умолчанию {default_port}): ")
     sys.stdout.flush()
