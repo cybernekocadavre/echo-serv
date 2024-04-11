@@ -4,29 +4,10 @@
 # In[ ]:
 
 # Код сервера с модификациями
-import socket
-
-def welcome_client(client_address):
-    ip_address = client_address[0]
-    try:
-        with open("known_clients.txt", "r") as file:
-            known_clients = file.readlines()
-            for known_client in known_clients:
-                if ip_address in known_client:
-                    return known_client.split(":")[1].strip()
-    except FileNotFoundError:
-        pass
-
-    # Если клиент неизвестен, запрашиваем его имя и записываем в файл
-    name = input(f"Введите имя для клиента с IP-адресом {ip_address}: ")
-    with open("known_clients.txt", "a") as file:
-        file.write(f"{ip_address}:{name}\n")
-    return name
-
-host = sys.argv[1] if len(sys.argv) > 1 else ''
-port = int(sys.argv[2]) if len(sys.argv) > 2 else 12345
-
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = input("Введите имя хоста для сервера (пусто для использования всех доступных интерфейсов): ")
+port = int(input("Введите номер порта для сервера: "))
+
 server_socket.bind((host, port))
 server_socket.listen(1)
 
