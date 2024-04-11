@@ -22,36 +22,37 @@ try:
     # Связываем сокет с хостом и портом
     server_socket.bind((host, port))
 
-    while True:
-        # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
-        server_socket.listen(1)
+    # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
+    server_socket.listen(1)
 
-        print("Сервер запущен. Ожидание подключения...")
+    print("Сервер запущен. Ожидание подключения...")
 
-        # Принимаем входящее подключение
-        client_socket, client_address = server_socket.accept()
-        print(f"Подключение от {client_address}")
+    # Принимаем входящее подключение
+    client_socket, client_address = server_socket.accept()
+    print(f"Подключение от {client_address}")
 
-        try:
-            while True:
-                # Принимаем данные от клиента
-                data = client_socket.recv(1024)
-                if not data:
-                    break
+    try:
+        while True:
+            # Принимаем данные от клиента
+            data = client_socket.recv(1024)
+            if not data:
+                break
 
-                # Отправляем обратно клиенту те же данные в верхнем регистре
-                client_socket.sendall(data.upper())
-                print(f"Принято от клиента: {data.decode('utf-8')}")
+            # Отправляем обратно клиенту те же данные в верхнем регистре
+            client_socket.sendall(data.upper())
+            print(f"Принято от клиента: {data.decode('utf-8')}")
 
-        finally:
-            # Закрываем соединение с клиентом
-            client_socket.close()
-            print("Соединение с клиентом закрыто.")
+    finally:
+        # Закрываем соединение с клиентом
+        client_socket.close()
+        print("Соединение с клиентом закрыто.")
 
 except KeyboardInterrupt:
     print("\nСервер остановлен.")
 
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
+
 finally:
     # Закрываем серверный сокет
     server_socket.close()
-
