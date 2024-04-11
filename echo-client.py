@@ -3,10 +3,12 @@
 
 # In[ ]:
 
-host = sys.argv[1]
-port = int(sys.argv[2])
+import socket
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = input("Введите имя хоста сервера: ")
+port = int(input("Введите номер порта сервера: "))
+
 client_socket.connect((host, port))
 print("Подключение к серверу установлено.")
 
