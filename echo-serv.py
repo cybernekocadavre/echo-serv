@@ -8,11 +8,12 @@ def get_host_port():
     default_host = 'localhost'
     default_port = 9091
 
-    host_input = input(f"Введите имя хоста: ")
-    host = host_input.strip()
-    print(host)
+    print(f"Введите имя хоста (по умолчанию {default_host}): ")
+    host_input = input()
+    host = host_input.strip() or default_host
 
-    port_input = input(f"Введите номер порта (по умолчанию {default_port}): ")
+    print(f"Введите номер порта (по умолчанию {default_port}): ")
+    port_input = input()
     port = port_input.strip() or default_port
 
     return host, int(port)
@@ -60,5 +61,3 @@ except Exception as e:
 finally:
     # Закрываем серверный сокет
     server_socket.close()
-
-
