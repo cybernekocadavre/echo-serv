@@ -10,16 +10,17 @@ def get_host_port():
     default_port = 9091
 
     print(f"Введите имя хоста (по умолчанию {default_host}): ")
-    sys.stdout.flush()  # Flush output to ensure prompt is displayed immediately
-    host_input = input()
-    host = host_input.strip() or default_host
+    sys.stdout.flush()
+    host_input = sys.stdin.readline().strip()
+    host = host_input or default_host
 
     print(f"Введите номер порта (по умолчанию {default_port}): ")
-    sys.stdout.flush()  # Flush output to ensure prompt is displayed immediately
-    port_input = input()
-    port = port_input.strip() or default_port
+    sys.stdout.flush()
+    port_input = sys.stdin.readline().strip()
+    port = port_input or default_port
 
     return host, int(port)
+
 
 # Создаем TCP сокет
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
