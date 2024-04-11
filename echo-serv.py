@@ -30,9 +30,17 @@ try:
         if not data:
             break
 
+        # Выводим данные от клиента
+        message = data.decode('utf-8')
+        print(f"Принято от клиента: {message}")
+
+        # Если клиент ввел "exit", останавливаемся
+        if message.strip() == "exit":
+            break
+
         # Отправляем обратно клиенту те же данные в верхнем регистре
         client_socket.sendall(data.upper())
-        print(f"Принято от клиента: {data.decode('utf-8')}")
+
 finally:
     # Закрываем соединение с клиентом
     client_socket.close()
