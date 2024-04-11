@@ -24,25 +24,22 @@ server_socket.listen(1)
 
 logging.info("Сервер запущен. Ожидание подключения...")
 
-# Принимаем входящее подключение
-client_socket, client_address = server_socket.accept()
-logging.info(f"Подключение от {client_address}")
+while True:
+    # Принимаем входящее подключение
+    client_socket, client_address = server_socket.accept()
+    logging.info(f"Подключение от {client_address}")
 
-try:
-    while True:
-        # Принимаем данные от клиента
-        data = client_socket.recv(1024)
-        if not data:
-            break
+    try:
+        while True:
+            # Принимаем данные от клиента
+            data = client_socket.recv(1024)
+            if not data:
+                break
 
-        # Отправляем обратно клиенту те же данные в верхнем регистре
-        client_socket.sendall(data.upper())
-        logging.info(f"Принято от клиента: {data.decode('utf-8')}")
-finally:
-    # Закрываем соединение с клиентом
-    client_socket.close()
-
-# Закрываем серверный сокет
-server_socket.close()
-logging.info("Сервер остановлен")
-
+            # Отправляем обратно клиенту те же данные в верхнем регистре
+            client_socket.sendall(data.upper())
+            logging.info(f"Принято от клиента: {data.decode('utf-8')}")
+    finally:
+        # Закрываем соединение с клиентом
+        client_socket.close()
+        logging.info("Соединение с клиентом закрыто")
