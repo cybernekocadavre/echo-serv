@@ -3,18 +3,19 @@
 
 # In[ ]:
 import socket
+import sys
 
 def get_host_port():
     default_host = 'localhost'
     default_port = 9091
 
     print("Введите имя хоста (по умолчанию {}): ".format(default_host))
-    host_input = input()
-    host = host_input.strip() or default_host
+    host_input = sys.stdin.readline().strip()
+    host = host_input or default_host
 
     print("Введите номер порта (по умолчанию {}): ".format(default_port))
-    port_input = input()
-    port = port_input.strip() or default_port
+    port_input = sys.stdin.readline().strip()
+    port = port_input or default_port
 
     return host, int(port)
 
@@ -61,3 +62,4 @@ except Exception as e:
 finally:
     # Закрываем серверный сокет
     server_socket.close()
+
