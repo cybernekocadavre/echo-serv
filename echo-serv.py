@@ -11,15 +11,16 @@ def get_host_port():
 
     print(f"Введите имя хоста (по умолчанию {default_host}): ")
     sys.stdout.flush()
-    host_input = sys.stdin.readline().strip()
+    host_input = sys.stdin.read().strip()
     host = host_input or default_host
 
     print(f"Введите номер порта (по умолчанию {default_port}): ")
     sys.stdout.flush()
-    port_input = sys.stdin.readline().strip()
+    port_input = sys.stdin.read().strip()
     port = port_input or default_port
 
     return host, int(port)
+
 
 
 # Создаем TCP сокет
