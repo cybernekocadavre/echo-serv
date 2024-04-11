@@ -66,6 +66,10 @@ while True:
             # Логируем принятые данные
             logging.info(data.decode())
 
+    except ConnectionResetError:
+        print("Соединение с клиентом разорвано.")
+        client_socket.close()
+
     # Закрываем соединение с клиентом
     client_socket.close()
 
