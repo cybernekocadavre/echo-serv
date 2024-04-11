@@ -3,18 +3,30 @@
 
 # In[ ]:
 import socket
-import logging
 
-# Настройка логгирования
-logging.basicConfig(filename='server.log', level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s: %(message)s')
+# Функция для чтения имен клиентов из файла
+def read_clients():
+    try:
+        with open('clients.txt', 'r') as file:
+            clients = {}
+            for line in file:
+                ip, name = line.strip().split(',')
+                clients[ip] = name
+        return clients
+    except FileNotFoundError:
+        return {}
+
+# Функция для записи нового клиента в файл
+def write_client(ip, name):
+    with open('clients.txt', 'a') as file:
+        file.write(f"{ip},{name}\n")
 
 # Создаем TCP сокет
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт для сервера
 host = ''  # Пустая строка означает использование всех доступных интерфейсов
-port = 9091  # Выбираем порт для сервера
+port = 9090  # Выбираем порт для сервера
 
 # Связываем сокет с хостом и портом
 server_socket.bind((host, port))
@@ -22,24 +34,33 @@ server_socket.bind((host, port))
 # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
 server_socket.listen(1)
 
-logging.info("Сервер запущен. Ожидание подключения...")
+print("Сервер запущен. Ожидание подключения...")
+
+# Читаем информацию о клиентах из файла
+clients = read_clients()
 
 while True:
     # Принимаем входящее подключение
     client_socket, client_address = server_socket.accept()
-    logging.info(f"Подключение от {client_address}")
+    print(f"Подключение от {client_address}")
 
-    try:
-        while True:
-            # Принимаем данные от клиента
-            data = client_socket.recv(1024)
-            if not data:
-                break
+    ip = client_address[0]
 
-            # Отправляем обратно клиенту те же данные в верхнем регистре
-            client_socket.sendall(data.upper())
-            logging.info(f"Принято от клиента: {data.decode('utf-8')}")
-    finally:
-        # Закрываем соединение с клиентом
-        client_socket.close()
-        logging.info("Соединение с клиентом закрыто")
+    if ip in clients:
+        # Если клиент известен, приветствуем его по имени
+        name = clients[ip]
+        client_socket.send(f"Привет, {name}!".encode())
+    else:
+        # Если клиент неизвестен, запрашиваем у него имя
+        client_socket.send("Привет! Пожалуйста, введите ваше имя: ".encode())
+        name = client_socket.recv(1024).decode().strip()
+        print(f"Новый клиент ({ip}): {name}")
+
+        # Записываем имя клиента в файл
+        write_client(ip, name)
+
+        # Отправляем клиенту сообщение с приветствием
+        client_socket.send(f"Привет, {name}! Ваше имя добавлено в список известных клиентов.".encode())
+
+    # Закрываем соединение с клиентом
+    client_socket.close()
