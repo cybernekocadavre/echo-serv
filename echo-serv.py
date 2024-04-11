@@ -55,16 +55,15 @@ while True:
         write_client(ip)
         client_socket.send("Привет!".encode())
 
-    try:
-        while True:
-            # Получаем данные от клиента
-            data = client_socket.recv(1024)
-            if not data:
-                break
-            # Преобразуем данные в верхний регистр и отправляем обратно клиенту
-            client_socket.send(data.upper())
-            # Логируем принятые данные
-            logging.info(data.decode())
+   while True:
+        # Получаем данные от клиента
+        data = client_socket.recv(1024)
+        if not data:
+            break
+        # Преобразуем данные в верхний регистр и отправляем обратно клиенту
+        client_socket.send(data.upper())
+        # Логируем принятые данные
+        logging.info(data.decode())
 
     except ConnectionResetError:
         print("Соединение с клиентом разорвано.")
