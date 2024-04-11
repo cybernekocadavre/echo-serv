@@ -10,20 +10,21 @@ def read_clients():
         with open('clients.txt', 'r') as file:
             clients = [line.strip() for line in file]
         return clients
-    except FileNotFoundError:
-        return []
 
 # Функция для записи нового клиента в файл
 def write_client(ip):
     with open('clients.txt', 'a') as file:
+        # a это append
         file.write(f"{ip}\n")
 
 # Создаем TCP сокет
+# AF_INET указывает на использование сетевого протокола IPv4
+# SOCK_STREAM указывает, что мы используем протокол TCP для надежной передачи потока данных
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт для сервера
 host = ''  # Пустая строка означает использование всех доступных интерфейсов
-port = 9091  # Выбираем порт для сервера
+port = 9091
 
 # Связываем сокет с хостом и портом
 server_socket.bind((host, port))
@@ -44,7 +45,7 @@ while True:
     ip = client_address[0]
 
     if ip in clients:
-        # Если клиент известен, приветствуем его
+        # Если клиент известен, приветствуем его как постоянного клиента
         client_socket.send("Снова здравствуйте!".encode())
     else:
         # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
