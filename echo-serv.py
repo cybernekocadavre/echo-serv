@@ -61,3 +61,4 @@ except Exception as e:
 finally:
     # Закрываем серверный сокет
     server_socket.close()
+
