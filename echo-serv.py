@@ -20,20 +20,15 @@ def get_host_port():
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
-    while True:
-        host, port = get_host_port()
+    host, port = get_host_port()
 
-        try:
-            # Связываем сокет с хостом и портом
-            server_socket.bind((host, port))
-            break
-        except OSError as e:
-            print(f"Ошибка: {e}. Попробуйте другой хост и/или порт.")
+    # Связываем сокет с хостом и портом
+    server_socket.bind((host, port))
 
     # Начинаем прослушивать порт, одновременно обслуживая только одно подключение
     server_socket.listen(1)
 
-    print("Сервер запущен. Ожидание подключения...")
+    print(f"Сервер запущен. Ожидание подключения на {host}:{port}...")
 
     # Принимаем входящее подключение
     client_socket, client_address = server_socket.accept()
@@ -58,7 +53,11 @@ try:
 except KeyboardInterrupt:
     print("\nСервер остановлен.")
 
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
+
 finally:
     # Закрываем серверный сокет
     server_socket.close()
+
 
