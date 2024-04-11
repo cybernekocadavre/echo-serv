@@ -5,6 +5,7 @@
 import socket
 import logging
 
+# Настройка логирования
 logging.basicConfig(filename='server.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Функция для чтения IP-адресов клиентов из файла
@@ -13,21 +14,20 @@ def read_clients():
         with open('clients.txt', 'r') as file:
             clients = [line.strip() for line in file]
         return clients
+    except FileNotFoundError:
+        return []
 
 # Функция для записи нового клиента в файл
 def write_client(ip):
     with open('clients.txt', 'a') as file:
-        # a это append
         file.write(f"{ip}\n")
 
 # Создаем TCP сокет
-# AF_INET указывает на использование сетевого протокола IPv4
-# SOCK_STREAM указывает, что мы используем протокол TCP для надежной передачи потока данных
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Получаем хост и порт для сервера
 host = ''  # Пустая строка означает использование всех доступных интерфейсов
-port = 9091
+port = 9090  # Выбираем порт для сервера
 
 # Связываем сокет с хостом и портом
 server_socket.bind((host, port))
@@ -48,7 +48,7 @@ while True:
     ip = client_address[0]
 
     if ip in clients:
-        # Если клиент известен, приветствуем его как постоянного клиента
+        # Если клиент известен, приветствуем его
         client_socket.send("Снова здравствуйте!".encode())
     else:
         # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
@@ -69,9 +69,3 @@ while True:
     except ConnectionResetError:
         print("Соединение с клиентом разорвано.")
         client_socket.close()
-
-    # Закрываем соединение с клиентом
-    client_socket.close()
-
-    # Переопределяем список клиентов после обработки текущего подключения
-    clients = read_clients()
