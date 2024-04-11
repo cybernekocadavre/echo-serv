@@ -47,17 +47,14 @@ while True:
 
     ip = client_address[0]
 
-    if ip not in clients:
-        # Если клиент неизвестен, записываем его IP-адрес в файл
-        write_client(ip)
-        clients.append(ip)
-
     if ip in clients:
         # Если клиент известен, приветствуем его
         client_socket.send("Снова здравствуйте!".encode())
     else:
         # Если клиент неизвестен, приветствуем
         client_socket.send("Привет!".encode())
+        write_client(ip)
+        clients.append(ip)
 
     try:
         while True:
