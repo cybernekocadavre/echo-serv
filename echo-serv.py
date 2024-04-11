@@ -3,6 +3,9 @@
 
 # In[ ]:
 import socket
+import logging
+
+logging.basicConfig(filename='server.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Функция для чтения IP-адресов клиентов из файла
 def read_clients():
@@ -51,6 +54,17 @@ while True:
         # Если клиент неизвестен, записываем его IP-адрес в файл и приветствуем
         write_client(ip)
         client_socket.send("Привет!".encode())
+
+    try:
+        while True:
+            # Получаем данные от клиента
+            data = client_socket.recv(1024)
+            if not data:
+                break
+            # Преобразуем данные в верхний регистр и отправляем обратно клиенту
+            client_socket.send(data.upper())
+            # Логируем принятые данные
+            logging.info(data.decode())
 
     # Закрываем соединение с клиентом
     client_socket.close()
