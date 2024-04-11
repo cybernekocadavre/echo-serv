@@ -3,18 +3,14 @@
 
 # In[ ]:
 
-import socket
+host = sys.argv[1]
+port = int(sys.argv[2])
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = input("Введите имя хоста сервера: ")
-port = int(input("Введите номер порта сервера: "))
-
-print(f"Попытка подключения к серверу {host}:{port}...")
+client_socket.connect((host, port))
+print("Подключение к серверу установлено.")
 
 try:
-    client_socket.connect((host, port))
-    print("Подключение к серверу установлено.")
-
     while True:
         message = input("Введите сообщение для отправки серверу ('exit' для завершения): ")
         if message.lower() == "exit":
