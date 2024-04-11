@@ -3,16 +3,19 @@
 
 # In[ ]:
 import socket
+import sys
 
 def get_host_port():
     default_host = 'localhost'
     default_port = 9091
 
     print(f"Введите имя хоста (по умолчанию {default_host}): ")
+    sys.stdout.flush()  # Flush output to ensure prompt is displayed immediately
     host_input = input()
     host = host_input.strip() or default_host
 
     print(f"Введите номер порта (по умолчанию {default_port}): ")
+    sys.stdout.flush()  # Flush output to ensure prompt is displayed immediately
     port_input = input()
     port = port_input.strip() or default_port
 
@@ -61,4 +64,3 @@ except Exception as e:
 finally:
     # Закрываем серверный сокет
     server_socket.close()
-
